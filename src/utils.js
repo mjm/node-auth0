@@ -1,5 +1,5 @@
 var Promise = require('bluebird');
-var request = require('request');
+var fetch = require('node-fetch');
 var pkg = require('../package.json');
 
 /**
@@ -70,23 +70,17 @@ utils.wrapPropertyMethod = function(Parent, name, propertyMethod) {
  * @memberOf  module:utils
  */
 utils.getRequestPromise = function(settings) {
-  return new Promise(function(resolve, reject) {
-    request(
-      {
-        url: settings.url,
-        method: settings.method,
-        body: settings.data,
-        json: typeof settings.data === 'object',
-        headers: settings.headers
-      },
-      function(err, res, body) {
-        if (err) {
-          reject(err);
-          return;
-        }
+  var bodyOptions = settings.method === 'GET' ? {} : { body: JSON.stringify(settings.data) };
+  var headers = {
+    'Content-Type': 'application/json',
+    ...settings.headers
+  };
 
-        resolve(res.body);
-      }
-    );
-  });
+  var result = fetch(settings.url, {
+    method: settings.method,
+    ...bodyOptions,
+    headers
+  }).then(res => res.json());
+
+  return Promise.resolve(result);
 };

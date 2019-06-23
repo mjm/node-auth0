@@ -51,7 +51,7 @@ describe('TokensManager', function() {
     beforeEach(function() {
       this.request = nock(BASE_URL)
         .post(path)
-        .reply(200);
+        .reply(200, { ok: true });
     });
 
     it('should require an ID token', function() {
@@ -104,7 +104,7 @@ describe('TokensManager', function() {
       var request = nock(BASE_URL)
         .post(path)
         .matchHeader('Content-Type', validOptions.headers['Content-Type'])
-        .reply(200);
+        .reply(200, { ok: true });
 
       manager.getInfo('VALID_TOKEN').then(function() {
         expect(request.isDone()).to.be.true;
@@ -120,7 +120,7 @@ describe('TokensManager', function() {
         .post(path, function(body) {
           return body.id_token === 'VALID_TOKEN';
         })
-        .reply(200);
+        .reply(200, { ok: true });
 
       manager.getInfo('VALID_TOKEN').then(function() {
         expect(request.isDone()).to.be.true;
@@ -137,7 +137,7 @@ describe('TokensManager', function() {
     beforeEach(function() {
       this.request = nock(BASE_URL)
         .post(path)
-        .reply(200);
+        .reply(200, { ok: true });
     });
 
     it('should require a data object', function() {
@@ -251,7 +251,7 @@ describe('TokensManager', function() {
 
           return true;
         })
-        .reply();
+        .reply(200, { ok: true });
 
       manager.getDelegationToken(data).then(function() {
         expect(request.isDone()).to.be.true;
@@ -274,7 +274,7 @@ describe('TokensManager', function() {
         .post(path, function(body) {
           return body.client_id === validOptions.clientId;
         })
-        .reply();
+        .reply(200, { ok: true });
 
       manager.getDelegationToken(data).then(function() {
         expect(request.isDone()).to.be.true;
@@ -298,7 +298,7 @@ describe('TokensManager', function() {
         .post(path, function(body) {
           return body.client_id === data.client_id;
         })
-        .reply();
+        .reply(200, { ok: true });
 
       manager.getDelegationToken(data).then(function() {
         expect(request.isDone()).to.be.true;
@@ -320,7 +320,7 @@ describe('TokensManager', function() {
       var request = nock(BASE_URL)
         .post(path)
         .matchHeader('Test-Header', validOptions.headers['Test-Header'])
-        .reply(200);
+        .reply(200, { ok: true });
 
       manager.getDelegationToken(data).then(function() {
         expect(request.isDone()).to.be.true;
